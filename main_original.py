@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 from functools import partial
-from audio_mae import AudioMaskedAutoencoderViT
+from models_audio_mae import AudioMaskedAutoencoderViT
 
 audio_mels = torch.ones([2, 1, 1024, 128])
 

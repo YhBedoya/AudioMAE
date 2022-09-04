@@ -233,3 +233,9 @@ class AudioMaskedAutoencoderViT(nn.Module):
         pred = self.forward_decoder(latent, ids_restore)  # [N, L, p*p*1]
         loss = self.forward_loss(imgs, pred, mask)
         return loss, pred, mask
+
+def audioMae_vit_base_args(**kwargs):  #TODO: define the arguments according with the paper
+    model = AudioMaskedAutoencoderViT(**kwargs)
+    return model
+
+audioMae_vit_base = audioMae_vit_base_args
