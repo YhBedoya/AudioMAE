@@ -2,8 +2,7 @@ from torch.utils.data import Dataset
 import torch
 import glob
 import torchaudio
-
-
+import matplotlib.pyplot as plt
 
 class DatasetGenerator(Dataset):
     """AudioSet Dataset."""
@@ -61,11 +60,12 @@ if __name__ == "__main__":
     mel_spectrogram = torchaudio.transforms.MelSpectrogram(
         sample_rate= 16000, #Define,
         n_fft = 1024,
-        hop_length = 512,
-        n_mels=64
+        hop_length = 128,
+        n_mels=128
     )
 
     usd = DatasetGenerator(AUDIO_DIR, SAMPLE_RATE, mel_spectrogram)
 
     signal, label = usd[0]
-    a = 1
+
+    print(signal.shape)
