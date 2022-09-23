@@ -51,7 +51,7 @@ def get_args_parser():
     parser = argparse.ArgumentParser('audioMAE pre-training', add_help=False)
     parser.add_argument('--batch_size', default=64, type=int,
                         help='Batch size per GPU (effective batch size is batch_size * accum_iter * # gpus')
-    parser.add_argument('--epochs', default=50, type=int) #TODO: check in the original the number of epochs
+    parser.add_argument('--epochs', default=400, type=int) #TODO: check in the original the number of epochs
     parser.add_argument('--accum_iter', default=1, type=int,
                         help='Accumulate gradient iterations (for increasing the effective batch size under memory constraints)')
 
@@ -59,7 +59,7 @@ def get_args_parser():
     parser.add_argument('--model', default='audioMae_vit_base', type=str, metavar='MODEL',
                         help='Name of model to train')
 
-    parser.add_argument('--input_size', default=64, type=int, #TODO: define according to the paper parameters
+    parser.add_argument('--input_size', default=224, type=int, #TODO: define according to the paper parameters
                         help='images input size')
 
     parser.add_argument('--mask_ratio', default=0.75, type=float, #TODO: define according to the paper parameters
@@ -233,3 +233,9 @@ def main(args):
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
     print('Training time {}'.format(total_time_str))
 
+if __name__ == '__main__':
+    args = get_args_parser()
+    args = args.parse_args()
+    if args.output_dir:
+        Path(args.output_dir).mkdir(parents=True, exist_ok=True)
+    main(args)
