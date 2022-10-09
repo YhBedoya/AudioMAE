@@ -3,6 +3,8 @@ import torch
 import glob
 import torchaudio
 import matplotlib.pyplot as plt
+import librosa.display
+import numpy as np
 
 class DatasetGenerator(Dataset):
     """AudioSet Dataset."""
@@ -16,7 +18,7 @@ class DatasetGenerator(Dataset):
         """
         self.root_dir = data_path
         self.transform = transform
-        self.files = glob.glob(self.root_dir + '/**/*.wav', recursive=True)
+        self.files = glob.glob(self.root_dir + '/**/--0Oh0JxzjQ_30.wav', recursive=True)
         self.transformation = transform
         self.target_sample_rate = target_sample_rate
 
@@ -28,11 +30,11 @@ class DatasetGenerator(Dataset):
         audio_sample_path = self._get_audio_sample_path(index)
         label = self._get_audio_sample_label(index, audio_sample_path)
         signal, sr = torchaudio.load(audio_sample_path)
-        signal = self._resample(signal, sr)
         signal = self._mix_down(signal)
+        signal = self._resample(signal, sr)
+        print(f"Signal shape: {signal.shape}")
         signal = self.transformation(signal)
-        return signal, label
-
+        signal = self._powerToDB(signal)
         return signal, label
 
     def _resample(self, signal, sr):
@@ -41,9 +43,14 @@ class DatasetGenerator(Dataset):
             signal = resampler(signal)
         return signal
 
-    def _mix_down(selfself, signal):
+    def _mix_down(self, signal):
         if signal.shape[0] > 1:
             signal = torch.mean(signal, dim=0, keepdim=True)
+        return signal
+
+    def _powerToDB(self, signal):
+        powerToDB = torchaudio.transforms.AmplitudeToDB(stype='power')
+        signal = powerToDB(signal)
         return signal
 
     def _get_audio_sample_path(self, index):
@@ -53,19 +60,29 @@ class DatasetGenerator(Dataset):
         label = audio_path.split("\\")[-2]
         return label
 
+def plotMelSpectrogram(signal,sr):
+    plt.figure(figsize=(25, 10))
+    librosa.display.specshow(signal,
+                             x_axis="time",
+                             y_axis="mel",
+                             sr=sr)
+    plt.colorbar(format="%+2.f")
+    plt.show()
+
 if __name__ == "__main__":
-    AUDIO_DIR = "G:\My Drive\Data Science and Engineering - PoliTo2\Thesis\models\AudioMAE\scripts\datasets\\audioset201906\\audios\\balanced_train_segments"
+    AUDIO_DIR = "G:\My Drive\Data Science and Engineering - PoliTo2\Thesis\Audioset"
     SAMPLE_RATE = 16000
 
     mel_spectrogram = torchaudio.transforms.MelSpectrogram(
-        sample_rate= 16000, #Define,
-        n_fft = 1024,
-        hop_length = 128,
+        sample_rate= SAMPLE_RATE,
+        n_fft = 400,
+        #win_length = 400,
+        hop_length = 160,
         n_mels=128
     )
 
     usd = DatasetGenerator(AUDIO_DIR, SAMPLE_RATE, mel_spectrogram)
 
     signal, label = usd[0]
-
+    plotMelSpectrogram(np.squeeze(signal.detach().numpy()), SAMPLE_RATE)
     print(signal.shape)
