@@ -57,7 +57,7 @@ class DatasetGenerator(Dataset):
         return self.files[index]
 
     def _get_audio_sample_label(self, index, audio_path):
-        label = audio_path.split("\\")[-2]
+        label = audio_path.split("/")[-2]
         return label
 
 def plotMelSpectrogram(signal,sr):
@@ -70,7 +70,7 @@ def plotMelSpectrogram(signal,sr):
     plt.show()
 
 if __name__ == "__main__":
-    AUDIO_DIR = "G:\My Drive\Data Science and Engineering - PoliTo2\Thesis\Audioset"
+    AUDIO_DIR = "/home/yhbedoya/Drive/Data Science and Engineering - PoliTo2/Thesis/Audioset"
     SAMPLE_RATE = 16000
 
     mel_spectrogram = torchaudio.transforms.MelSpectrogram(
