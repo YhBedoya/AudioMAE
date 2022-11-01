@@ -10,6 +10,7 @@ import torch
 import torch.backends.cudnn as cudnn
 import torchaudio.transforms as transforms
 from torch.utils.tensorboard import SummaryWriter
+import torchaudio
 
 import timm
 
@@ -51,7 +52,7 @@ def get_args_parser():
     parser = argparse.ArgumentParser('audioMAE pre-training', add_help=False)
     parser.add_argument('--batch_size', default=64, type=int,
                         help='Batch size per GPU (effective batch size is batch_size * accum_iter * # gpus')
-    parser.add_argument('--epochs', default=400, type=int) #TODO: check in the original the number of epochs
+    parser.add_argument('--epochs', default=400, type=int)
     parser.add_argument('--accum_iter', default=1, type=int,
                         help='Accumulate gradient iterations (for increasing the effective batch size under memory constraints)')
 
@@ -138,14 +139,26 @@ def main(args):
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
     """
+    sample_rate = 16000
+
+    hanningWindowSeconds = 25/1000
+    win_length = int(sample_rate * hanningWindowSeconds)
+    print(f'win_length: {win_length}')
+    n_fft = int(win_length * 1.5)
+    print(f'n_fft: {n_fft}')
+    shiftsWindSeconds = 10/1000
+    hop_len = int(sample_rate * shiftsWindSeconds)
+    print(f'hop_len: {hop_len}')
 
     mel_spectrogram = torchaudio.transforms.MelSpectrogram(
-        sample_rate= 16000, #Define,
-        n_fft = 1024,
-        hop_length = 128,
+        sample_rate= sample_rate,
+        n_fft = n_fft,
+        win_length = win_length,
+        hop_length = hop_len,
         n_mels=128
     )
-    sample_rate = 16000  #TODO: Define this in the parameters
+
+
     dataset_train = DatasetGenerator(args.data_path, mel_spectrogram, sample_rate)
     print(dataset_train)
 
@@ -184,9 +197,9 @@ def main(args):
     eff_batch_size = args.batch_size * args.accum_iter * misc.get_world_size()
 
     if args.lr is None:  # only base_lr is specified
-        args.lr = args.blr * eff_batch_size / 256  # TODO: understand magic number
+        args.lr = args.blr * eff_batch_size / 256
 
-    print("base lr: %.2e" % (args.lr * 256 / eff_batch_size))  # TODO: understand magic number
+    print("base lr: %.2e" % (args.lr * 256 / eff_batch_size))
     print("actual lr: %.2e" % args.lr)
 
     print("accumulate grad iterations: %d" % args.accum_iter)
