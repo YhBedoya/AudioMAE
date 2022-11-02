@@ -79,7 +79,7 @@ def plotMelSpectrogram(signal,sr):
     plt.colorbar(format="%+2.f")
     plt.show()
 
-if __name__ == "__main__":
+"""if __name__ == "__main__":
     AUDIO_DIR = "/home/yhbedoya/Repositories/AudioMAE/Data/"
     SAMPLE_RATE = 16000
 
@@ -95,4 +95,4 @@ if __name__ == "__main__":
 
     signal, label = usd[0]
     plotMelSpectrogram(np.squeeze(signal.detach().numpy()), SAMPLE_RATE)
-    print(signal.shape)
+    print(signal.shape)"""
