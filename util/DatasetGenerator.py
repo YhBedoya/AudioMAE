@@ -5,6 +5,7 @@ import torchaudio
 import matplotlib.pyplot as plt
 import librosa.display
 import numpy as np
+import os
 
 class DatasetGenerator(Dataset):
     """AudioSet Dataset."""
@@ -18,8 +19,8 @@ class DatasetGenerator(Dataset):
         """
         self.root_dir = data_path
         self.transform = transform
-        self.files = glob.glob(self.root_dir + '/**/--0Oh0JxzjQ_30.wav', recursive=True)
         self.transformation = transform
+        self.files = self._get_files() #glob.glob(self.root_dir + '/**/--0Oh0JxzjQ_30.wav', recursive=True)
         self.target_sample_rate = target_sample_rate
 
     def __len__(self):
@@ -60,6 +61,15 @@ class DatasetGenerator(Dataset):
         label = audio_path.split("/")[-2]
         return label
 
+    def _get_files(self):
+        audios = []
+        for path, subdirs, files in os.walk(self.root_dir):
+            if len(files) >0:
+                filesPath = map(lambda x:os.path.join(path, x), files)
+                audios += filesPath
+
+        return audios
+
 def plotMelSpectrogram(signal,sr):
     plt.figure(figsize=(25, 10))
     librosa.display.specshow(signal,
@@ -70,7 +80,7 @@ def plotMelSpectrogram(signal,sr):
     plt.show()
 
 if __name__ == "__main__":
-    AUDIO_DIR = "/home/yhbedoya/Drive/Data Science and Engineering - PoliTo2/Thesis/Audioset"
+    AUDIO_DIR = "/home/yhbedoya/Repositories/AudioMAE/Data/"
     SAMPLE_RATE = 16000
 
     mel_spectrogram = torchaudio.transforms.MelSpectrogram(
