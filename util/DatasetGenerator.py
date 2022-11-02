@@ -10,13 +10,14 @@ import os
 class DatasetGenerator(Dataset):
     """AudioSet Dataset."""
 
-    def __init__(self, data_path, target_sample_rate,  transform):
+    def __init__(self, data_path, target_sample_rate,  transform, pre_train=True):
         """
         Args:
             root_dir (string): Directory with all the sounds.
             transform (callable, optional): Optional transform to be applied
                 on a sample.
         """
+        self.pre_train = pre_train
         self.root_dir = data_path
         self.transform = transform
         self.transformation = transform
@@ -36,7 +37,10 @@ class DatasetGenerator(Dataset):
         print(f"Signal shape: {signal.shape}")
         signal = self.transformation(signal)
         signal = self._powerToDB(signal)
-        return signal, label
+        if self.pre_train:
+            return signal
+        else:
+            return signal, label
 
     def _resample(self, signal, sr):
         if sr != self.target_sample_rate:
