@@ -14,7 +14,7 @@ import torchaudio
 
 import timm
 
-import util
+
 
 assert timm.__version__ == "0.3.2"  # version check
 
@@ -36,7 +36,7 @@ import timm.optim.optim_factory as optim_factory
 
 import util.misc as misc
 from util.misc import NativeScalerWithGradNormCount as NativeScaler
-
+from util.DatasetGenerator import DatasetGenerator
 import models_audio_mae
 
 from engine_pretrain import train_one_epoch
@@ -159,7 +159,7 @@ def main(args):
     )
 
 
-    dataset_train = util.DatasetGenerator(args.data_path, mel_spectrogram, sample_rate)
+    dataset_train = DatasetGenerator(args.data_path, mel_spectrogram, sample_rate)
     print(dataset_train)
 
     if True:  # args.distributed:
