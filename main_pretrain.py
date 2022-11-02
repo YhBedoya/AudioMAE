@@ -14,7 +14,7 @@ import torchaudio
 
 import timm
 
-from util import DatasetGenerator
+import util
 
 assert timm.__version__ == "0.3.2"  # version check
 
@@ -159,7 +159,7 @@ def main(args):
     )
 
 
-    dataset_train = DatasetGenerator(args.data_path, mel_spectrogram, sample_rate)
+    dataset_train = util.DatasetGenerator(args.data_path, mel_spectrogram, sample_rate)
     print(dataset_train)
 
     if True:  # args.distributed:
