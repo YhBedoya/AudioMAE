@@ -26,6 +26,7 @@ class DatasetGenerator(Dataset):
 
     def __len__(self):
         #TODO: define how to count the len of the dataset
+        print(len(self.files))
         return len(self.files)
 
     def __getitem__(self, index):
@@ -66,12 +67,13 @@ class DatasetGenerator(Dataset):
         return label
 
     def _get_files(self):
+        print('enter to get files')
         audios = []
         for path, subdirs, files in os.walk(self.root_dir):
             if len(files) >0:
                 filesPath = map(lambda x:os.path.join(path, x), files)
                 audios += filesPath
-
+        print('out of get files')
         return audios
 
 def plotMelSpectrogram(signal,sr):
