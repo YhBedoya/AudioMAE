@@ -70,10 +70,8 @@ class DatasetGenerator(Dataset):
         audios = []
         for path, subdirs, files in os.walk(self.root_dir):
             print(f'Current path {path}')
-            if len(files) >0:
-                print(f'Total files {len(files)}')
-                filesPath = map(lambda x:os.path.join(path, x), files)
-                audios += filesPath
+            for file in files:
+                audios.append(os.path.join(path, file))
             print(f'Cummulated number {len(audios)}')
         print('out of get files')
         return audios
