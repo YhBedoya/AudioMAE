@@ -73,7 +73,7 @@ class DatasetGenerator(Dataset):
         #    for file in files:
         #        audios.append(os.path.join(path, file))
         #    print(f'Cummulated number {len(audios)}')
-        with open('readme.txt') as f:
+        with open('/content/readme.txt') as f:
             lines = f.readlines()
         for i in range(len(lines)):
             lines[i] = lines[i].replace('\n', '')
