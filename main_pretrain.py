@@ -159,7 +159,7 @@ def main(args):
     )
 
 
-    dataset_train = DatasetGenerator(args.data_path, mel_spectrogram, sample_rate)
+    dataset_train = DatasetGenerator(data_path=args.data_path, target_sample_rate=sample_rate, transform=mel_spectrogram, )
     print(dataset_train)
 
     if True:  # args.distributed:
