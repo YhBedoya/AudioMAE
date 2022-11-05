@@ -9,6 +9,7 @@ class Transformer(nn.Module):
     def __init__(self, dim, depth, heads, dim_head, mlp_dim, dropout = 0.):
         super().__init__()
         self.layers = nn.ModuleList([])
+        print(dim)
         for _ in range(depth):
             self.layers.append(nn.ModuleList([
                 PreNorm(dim, Attention(dim, heads = heads, dim_head = dim_head, dropout = dropout)),
@@ -42,7 +43,7 @@ class AudioMaskedAutoencoderViT(nn.Module):
         self.pos_embed = nn.Parameter(torch.zeros(1, num_patches + 1, embed_dim),
                                       requires_grad=False)  # fixed sin-cos embedding
 
-        self.encoder = Transformer(embed_dim, encoder_depth, num_heads, embed_dim // num_heads, mlp_ratio * embed_dim)
+        self.encoder = Transformer(embed_dim, encoder_depth, num_heads, embed_dim // num_heads, int(mlp_ratio * embed_dim))
 
         self.norm = norm_layer(embed_dim)
         # --------------------------------------------------------------------------
@@ -58,7 +59,7 @@ class AudioMaskedAutoencoderViT(nn.Module):
 
         self.decoder_blocks = nn.ModuleList([
             SwinBlock(decoder_embed_dim, decoder_num_heads, decoder_embed_dim // num_heads,
-                      mlp_ratio * decoder_embed_dim,
+                      int(mlp_ratio * decoder_embed_dim),
                       shifted=True, window_size=4, relative_pos_embedding=True)
             for i in range(decoder_depth)])
 
