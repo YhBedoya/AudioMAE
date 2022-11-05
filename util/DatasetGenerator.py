@@ -69,7 +69,7 @@ class DatasetGenerator(Dataset):
 
     def _padding(self, signal):
         pad_size = 3700
-        diff = (self.target_sample_rate + pad_size) - signal.shape[1]
+        diff = ((self.target_sample_rate * 10) + pad_size) - signal.shape[1]
         signal = torch.cat((torch.zeros(1,diff), signal), 1)
         return signal
 
