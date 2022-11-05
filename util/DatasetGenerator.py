@@ -35,7 +35,6 @@ class DatasetGenerator(Dataset):
         signal = self._mix_down(signal)
         signal = self._resample(signal, sr)
         signal = self._padding(signal)
-        print(f"Signal shape: {signal.shape}")
         signal = self.transformation(signal)
         #fbank = torchaudio.compliance.kaldi.fbank(signal, htk_compat=True, sample_frequency=16000, use_energy=False, window_type='hanning', num_mel_bins=128, dither=0.0, frame_shift=10)
         signal = self._powerToDB(signal)
@@ -69,7 +68,9 @@ class DatasetGenerator(Dataset):
         return label
 
     def _padding(self, signal):
-        signal = torch.cat((torch.zeros(1,3700), signal), 1)
+        pad_size = 3700
+        diff = (self.target_sample_rate + pad_size) - signal.shape[1]
+        signal = torch.cat((torch.zeros(1,diff), signal), 1)
         return signal
 
     def _get_files(self):
