@@ -10,14 +10,13 @@ import os
 class DatasetGenerator(Dataset):
     """AudioSet Dataset."""
 
-    def __init__(self, data_path, target_sample_rate,  transform, pre_train=True):
+    def __init__(self, data_path, target_sample_rate,  transform):
         """
         Args:
             root_dir (string): Directory with all the sounds.
             transform (callable, optional): Optional transform to be applied
                 on a sample.
         """
-        self.pre_train = pre_train
         self.root_dir = data_path
         self.transform = transform
         self.transformation = transform
@@ -39,10 +38,7 @@ class DatasetGenerator(Dataset):
         #fbank = torchaudio.compliance.kaldi.fbank(signal, htk_compat=True, sample_frequency=16000, use_energy=False, window_type='hanning', num_mel_bins=128, dither=0.0, frame_shift=10)
         signal = self._powerToDB(signal)
         signal = torch.squeeze(signal)
-        if self.pre_train:
-            return signal
-        else:
-            return signal, label
+        return signal, label
 
     def _resample(self, signal, sr):
         if sr != self.target_sample_rate:
