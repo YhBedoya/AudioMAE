@@ -54,9 +54,8 @@ class PreNorm(nn.Module):
 class FeedForward(nn.Module):
     def __init__(self, dim, hidden_dim, dropout = 0.):
         super().__init__()
-        print(dim, hidden_dim)
         self.net = nn.Sequential(
-            nn.Linear(in_features=dim, out_features=hidden_dim),
+            nn.Linear(in_features=dim, out_features=int(hidden_dim)),
             nn.GELU(),
             nn.Dropout(dropout),
             nn.Linear(hidden_dim, dim),
