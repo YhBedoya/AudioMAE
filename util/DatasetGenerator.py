@@ -38,7 +38,7 @@ class DatasetGenerator(Dataset):
         #fbank = torchaudio.compliance.kaldi.fbank(signal, htk_compat=True, sample_frequency=16000, use_energy=False, window_type='hanning', num_mel_bins=128, dither=0.0, frame_shift=10)
         signal = self._powerToDB(signal)
         signal = torch.squeeze(signal)
-        return signal, label
+        return torch.transpose(signal, 0, 1), label
 
     def _resample(self, signal, sr):
         if sr != self.target_sample_rate:
