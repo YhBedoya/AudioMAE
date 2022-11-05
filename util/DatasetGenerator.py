@@ -74,18 +74,12 @@ class DatasetGenerator(Dataset):
 
     def _get_files(self):
         print('enter to get files')
-        #audios = []
-        #for path, subdirs, files in os.walk(self.root_dir):
-        #    print(f'Current path {path}')
-        #    for file in files:
-        #        audios.append(os.path.join(path, file))
-        #    print(f'Cummulated number {len(audios)}')
-        with open('/content/readme.txt') as f:
-            lines = f.readlines()
-        for i in range(len(lines)):
-            lines[i] = lines[i].replace('\n', '')
-        print('out of get files')
-        return lines
+        audios = []
+        for path, subdirs, files in os.walk(self.root_dir):
+            print(f'Current path {path}')
+            for file in files:
+                audios.append(os.path.join(path, file))
+            print(f'Cummulated number {len(audios)}')
 
 def plotMelSpectrogram(signal,sr):
     plt.figure(figsize=(25, 10))
