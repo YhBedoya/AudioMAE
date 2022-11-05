@@ -80,6 +80,7 @@ class DatasetGenerator(Dataset):
             for file in files:
                 audios.append(os.path.join(path, file))
             print(f'Cummulated number {len(audios)}')
+        return audios
 
 def plotMelSpectrogram(signal,sr):
     plt.figure(figsize=(25, 10))
