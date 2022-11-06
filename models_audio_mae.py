@@ -26,7 +26,7 @@ class AudioMaskedAutoencoderViT(nn.Module):
     """ Masked Autoencoder with VisionTransformer backbone
     """
 
-    def __init__(self, num_mels=128, mel_len=1024, patch_size=16, in_chans=3,
+    def __init__(self, num_mels=128, mel_len=1024, patch_size=16, in_chans=1,
                  embed_dim=768, encoder_depth=12, num_heads=12,
                  decoder_embed_dim=512, decoder_depth=16, decoder_num_heads=16,
                  mlp_ratio=4., norm_layer=nn.LayerNorm, norm_pix_loss=False):
