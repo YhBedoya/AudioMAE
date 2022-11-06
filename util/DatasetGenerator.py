@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import librosa.display
 import numpy as np
 import os
+import multiprocessing
+from tqdm import tqdm
 
 class DatasetGenerator(Dataset):
     """AudioSet Dataset."""
@@ -37,7 +39,7 @@ class DatasetGenerator(Dataset):
         signal = self.transformation(signal)
         #fbank = torchaudio.compliance.kaldi.fbank(signal, htk_compat=True, sample_frequency=16000, use_energy=False, window_type='hanning', num_mel_bins=128, dither=0.0, frame_shift=10)
         signal = self._powerToDB(signal)
-        return torch.transpose(signal, 1, 2), label
+        return torch.transpose(signal, 1, 2), label, audio_sample_path
 
     def _resample(self, signal, sr):
         if sr != self.target_sample_rate:
@@ -87,11 +89,54 @@ def plotMelSpectrogram(signal,sr):
     plt.colorbar(format="%+2.f")
     plt.show()
 
-"""if __name__ == "__main__":
+def saveTensorToFile(dataset, index):
+    signal, label, path = dataset[index]
+    subpath = "/home/yhbedoya/Repositories/AudioMAE/Dataset/" + "/".join(path.split("/")[-2:])[:-4] + ".pt"
+    torch.save(signal, subpath)
+
+if __name__ == "__main__":
     AUDIO_DIR = "/home/yhbedoya/Repositories/AudioMAE/Data/"
-    SAMPLE_RATE = 16000
+    sample_rate = 16000
+
+    hanningWindowSeconds = 25/1000
+    win_length = int(sample_rate * hanningWindowSeconds)
+    print(f'win_length: {win_length}')
+    n_fft = int(win_length * 1.5)
+    print(f'n_fft: {n_fft}')
+    shiftsWindSeconds = 10/1000
+    hop_len = int(sample_rate * shiftsWindSeconds)
+    print(f'hop_len: {hop_len}')
 
     mel_spectrogram = torchaudio.transforms.MelSpectrogram(
+        sample_rate= sample_rate,
+        n_fft = n_fft,
+        win_length = win_length,
+        hop_length = hop_len,
+        n_mels=128
+    )
+
+    dataset = DatasetGenerator(AUDIO_DIR, sample_rate, mel_spectrogram)
+
+    DATASET_DIR = "/home/yhbedoya/Repositories/AudioMAE/Dataset/"
+    processes = []
+
+    #saveTensorToFile(dataset, 0)
+    for i in tqdm(range(len(dataset))):
+        saveTensorToFile(dataset, i)
+
+"""        print(f'Start process {i}')
+        p = multiprocessing.Process(target = saveTensorToFile, args=(dataset, i))
+        p.start()
+        processes.append(p)
+
+
+    for p in processes:
+        p.join()
+    print(f'Finish joining process')
+        
+
+
+     mel_spectrogram = torchaudio.transforms.MelSpectrogram(
         sample_rate= SAMPLE_RATE,
         n_fft = 400,
         #win_length = 400,
@@ -103,4 +148,5 @@ def plotMelSpectrogram(signal,sr):
 
     signal, label = usd[0]
     plotMelSpectrogram(np.squeeze(signal.detach().numpy()), SAMPLE_RATE)
-    print(signal.shape)"""
+    print(signal.shape) """
+
