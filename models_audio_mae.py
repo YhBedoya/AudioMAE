@@ -9,7 +9,6 @@ class Transformer(nn.Module):
     def __init__(self, dim, depth, heads, dim_head, mlp_dim, dropout = 0.):
         super().__init__()
         self.layers = nn.ModuleList([])
-        print(dim)
         for _ in range(depth):
             self.layers.append(nn.ModuleList([
                 PreNorm(dim, Attention(dim, heads = heads, dim_head = dim_head, dropout = dropout)),
@@ -26,9 +25,9 @@ class AudioMaskedAutoencoderViT(nn.Module):
     """ Masked Autoencoder with VisionTransformer backbone
     """
 
-    def __init__(self, num_mels=128, mel_len=1024, patch_size=16, in_chans=1,
-                 embed_dim=768, encoder_depth=12, num_heads=12,
-                 decoder_embed_dim=512, decoder_depth=16, decoder_num_heads=16,
+    def __init__(self, num_mels=128, mel_len=1024, patch_size=16, in_chans=1,  #TODO: encoder_depth=12, decoder_depth=16
+                 embed_dim=768, encoder_depth=3, num_heads=12,
+                 decoder_embed_dim=512, decoder_depth=4, decoder_num_heads=16,
                  mlp_ratio=4., norm_layer=nn.LayerNorm, norm_pix_loss=False):
         super().__init__()
 
