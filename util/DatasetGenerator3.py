@@ -125,7 +125,7 @@ def calMeanvar(dataset, index):
 
     return mean, std
 
-"""if __name__ == "__main__":
+if __name__ == "__main__":
     AUDIO_DIR = "/home/yhbedoya/Repositories/AudioMAE/Data/"
     sample_rate = 16000
 
@@ -148,7 +148,14 @@ def calMeanvar(dataset, index):
 
     dataset = DatasetGenerator(AUDIO_DIR, sample_rate, mel_spectrogram)
 
-    DATASET_DIR = "/home/yhbedoya/Repositories/AudioMAE/Dataset/"
+    signal, label = dataset[0]
+    plotMelSpectrogram(np.squeeze(signal.detach().numpy()), sample_rate)
+    print(signal.shape)
+
+
+
+
+"""    DATASET_DIR = "/home/yhbedoya/Repositories/AudioMAE/Dataset/"
     processes = []
     means = []
     vars = []
