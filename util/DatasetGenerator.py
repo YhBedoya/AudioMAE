@@ -9,6 +9,7 @@ import os
 import multiprocessing
 from tqdm import tqdm
 import torchvision
+import time
 
 class DatasetGenerator(Dataset):
     """AudioSet Dataset."""
@@ -32,6 +33,7 @@ class DatasetGenerator(Dataset):
         return len(self.files)
 
     def __getitem__(self, index):
+        start = time.time()
         audio_sample_path = self._get_audio_sample_path(index)
         label = self._get_audio_sample_label(index, audio_sample_path)
         signal, sr = torchaudio.load(audio_sample_path)
@@ -42,6 +44,8 @@ class DatasetGenerator(Dataset):
         #fbank = torchaudio.compliance.kaldi.fbank(signal, htk_compat=True, sample_frequency=16000, use_energy=False, window_type='hanning', num_mel_bins=128, dither=0.0, frame_shift=10)
         signal = self._powerToDB(signal)
         signal = self.Normalizer(signal)
+        end = time.time()
+        print(f'Time of sample {end-start}')
         return torch.transpose(signal, 1, 2), label
 
     def _resample(self, signal, sr):
