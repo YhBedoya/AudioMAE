@@ -45,7 +45,7 @@ class DatasetGenerator(Dataset):
         signal = self._powerToDB(signal)
         signal = self.Normalizer(signal)
         end = time.time()
-        print(f'Time of sample {end-start}')
+        print(f'Audio {audio_sample_path} Time of sample {end-start}')
         return torch.transpose(signal, 1, 2), label
 
     def _resample(self, signal, sr):
