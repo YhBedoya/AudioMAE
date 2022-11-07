@@ -31,7 +31,7 @@ class DatasetGenerator(Dataset):
         label = self._get_audio_sample_label(index, audio_sample_path)
         signal = torch.load(audio_sample_path)
 
-        return signal
+        return signal, label
 
     def _get_audio_sample_path(self, index):
         return self.files[index]
