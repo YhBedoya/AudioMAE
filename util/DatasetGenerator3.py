@@ -50,7 +50,8 @@ class DatasetGenerator(Dataset):
     def _dataCollector(self):
         specs = {}
         labels = {}
-        for index in range(len(self.files)):
+        print(f'start data collection')
+        for index in tqdm(range(len(self.files))):
             spec, label = self._specGenerator(index)
             specs[index] = spec
             labels[index] = label
