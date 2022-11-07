@@ -36,7 +36,7 @@ import timm.optim.optim_factory as optim_factory
 
 import util.misc as misc
 from util.misc import NativeScalerWithGradNormCount as NativeScaler
-from util.DatasetGenerator2 import DatasetGenerator
+from util.DatasetGenerator import DatasetGenerator
 import models_audio_mae
 
 from engine_pretrain import train_one_epoch

@@ -8,6 +8,7 @@ import numpy as np
 import os
 import multiprocessing
 from tqdm import tqdm
+import torchvision
 
 class DatasetGenerator(Dataset):
     """AudioSet Dataset."""
@@ -24,6 +25,7 @@ class DatasetGenerator(Dataset):
         self.transformation = transform
         self.files = self._get_files() #glob.glob(self.root_dir + '/**/--0Oh0JxzjQ_30.wav', recursive=True)
         self.target_sample_rate = target_sample_rate
+        self.Normalizer = torchvision.transforms.Normalize(mean=[-16.346750259399414], std=[20.36565399169922])
 
     def __len__(self):
         #TODO: define how to count the len of the dataset
@@ -39,6 +41,7 @@ class DatasetGenerator(Dataset):
         signal = self.transformation(signal)
         #fbank = torchaudio.compliance.kaldi.fbank(signal, htk_compat=True, sample_frequency=16000, use_energy=False, window_type='hanning', num_mel_bins=128, dither=0.0, frame_shift=10)
         signal = self._powerToDB(signal)
+        signal = self.Normalizer(signal)
         return torch.transpose(signal, 1, 2), label
 
     def _resample(self, signal, sr):
@@ -94,7 +97,14 @@ def saveTensorToFile(dataset, index):
     subpath = "/home/yhbedoya/Repositories/AudioMAE/Dataset/" + "/".join(path.split("/")[-2:])[:-4] + ".pt"
     torch.save(signal, subpath)
 
-if __name__ == "__main__":
+def calMeanvar(dataset, index):
+    signal, label = dataset[index]
+    mean = torch.mean(signal)
+    std = torch.square(torch.std(signal))
+
+    return mean, std
+
+"""if __name__ == "__main__":
     AUDIO_DIR = "/home/yhbedoya/Repositories/AudioMAE/Data/"
     sample_rate = 16000
 
@@ -119,10 +129,22 @@ if __name__ == "__main__":
 
     DATASET_DIR = "/home/yhbedoya/Repositories/AudioMAE/Dataset/"
     processes = []
-
+    means = []
+    vars = []
     #saveTensorToFile(dataset, 0)
     for i in tqdm(range(len(dataset))):
-        saveTensorToFile(dataset, i)
+        #saveTensorToFile(dataset, i)
+        m, v = calMeanvar(dataset, i)
+        means.append(m)
+        vars.append(v)
+
+    means, vars = np.array(means), np.array(vars)
+    
+    globalMean = np.mean(means)
+    globalStd = np.sqrt(np.mean(vars))
+
+    print(f'Global mean: {globalMean}, Global std: {globalStd}')"""
+
 
 """        print(f'Start process {i}')
         p = multiprocessing.Process(target = saveTensorToFile, args=(dataset, i))
