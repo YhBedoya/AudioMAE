@@ -1,12 +1,10 @@
 from torch.utils.data import Dataset
 import torch
-import glob
 import torchaudio
 import matplotlib.pyplot as plt
-import librosa.display
+#import librosa.display
 import numpy as np
 import os
-import multiprocessing
 from tqdm import tqdm
 import torchvision
 import time
@@ -101,14 +99,14 @@ class DatasetGenerator(Dataset):
             print(f'Cummulated number {len(audios)}')
         return audios
 
-def plotMelSpectrogram(signal,sr):
-    plt.figure(figsize=(25, 10))
-    librosa.display.specshow(signal,
-                             x_axis="time",
-                             y_axis="mel",
-                             sr=sr)
-    plt.colorbar(format="%+2.f")
-    plt.show()
+#def plotMelSpectrogram(signal,sr):       #Commented to be run on HPC without intalling librosa
+#    plt.figure(figsize=(25, 10))
+#    librosa.display.specshow(signal,
+#                             x_axis="time",
+#                             y_axis="mel",
+#                             sr=sr)
+#    plt.colorbar(format="%+2.f")
+#    plt.show()
 
 def saveTensorToFile(dataset, index):
     signal, label, path = dataset[index]
