@@ -59,10 +59,7 @@ class DatasetGenerator(Dataset):
         return specs, labels
         
     def __getitem__(self, index):
-        start = time.time()
         spect, label = self.data[index], self.labels[index]
-        end = time.time()
-        print(f'Time of sample {end-start}')
         return spect, label
 
     def _resample(self, signal, sr):
