@@ -85,7 +85,7 @@ def get_args_parser():
                         help='epochs to warmup LR')
 
     # Dataset parameters
-    parser.add_argument('--data_path', default='/content/drive/MyDrive/BassDrum/', type=str,  #TODO: data dir
+    parser.add_argument('--data_path', default='/home/yvelez//', type=str,  #TODO: data dir
                         help='dataset path') #'/content/drive/MyDrive/Data Science and Engineering - PoliTo2/Thesis/models/AudioMAE/audioSubset/'
 
     parser.add_argument('--output_dir', default='/content/drive/MyDrive/Data Science and Engineering - PoliTo2/Thesis/models/AudioMAE/output_dir',
@@ -107,9 +107,9 @@ def get_args_parser():
     parser.set_defaults(pin_mem=True)
 
     # distributed training parameters
-    parser.add_argument('--world_size', default=1, type=int,
+    parser.add_argument('--world_size', default=1, type=int,         #Number of gpus
                         help='number of distributed processes')
-    parser.add_argument('--local_rank', default=-1, type=int)
+    parser.add_argument('--local_rank', default=0, type=int)         #index of master gpu
     parser.add_argument('--dist_on_itp', action='store_true')
     parser.add_argument('--dist_url', default='env://',
                         help='url used to set up distributed training')
