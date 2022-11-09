@@ -147,49 +147,48 @@ class DatasetGenerator(Dataset):
 
 
 
-
-"""    DATASET_DIR = "/home/yhbedoya/Repositories/AudioMAE/Dataset/"
-    processes = []
-    means = []
-    vars = []
+#    DATASET_DIR = "/home/yhbedoya/Repositories/AudioMAE/Dataset/"
+#    processes = []
+#    means = []
+#    vars = []
     #saveTensorToFile(dataset, 0)
-    for i in tqdm(range(len(dataset))):
-        #saveTensorToFile(dataset, i)
-        m, v = calMeanvar(dataset, i)
-        means.append(m)
-        vars.append(v)
+#    for i in tqdm(range(len(dataset))):
+#        #saveTensorToFile(dataset, i)
+#        m, v = calMeanvar(dataset, i)
+#        means.append(m)
+#        vars.append(v)
 
-    means, vars = np.array(means), np.array(vars)
+#    means, vars = np.array(means), np.array(vars)
     
-    globalMean = np.mean(means)
-    globalStd = np.sqrt(np.mean(vars))
+#    globalMean = np.mean(means)
+#    globalStd = np.sqrt(np.mean(vars))
 
-    print(f'Global mean: {globalMean}, Global std: {globalStd}')"""
-
-
-"""        print(f'Start process {i}')
-        p = multiprocessing.Process(target = saveTensorToFile, args=(dataset, i))
-        p.start()
-        processes.append(p)
+#    print(f'Global mean: {globalMean}, Global std: {globalStd}')"""
 
 
-    for p in processes:
-        p.join()
-    print(f'Finish joining process')
+#        print(f'Start process {i}')
+#        p = multiprocessing.Process(target = saveTensorToFile, args=(dataset, i))
+#        p.start()
+#        processes.append(p)
+
+
+ #   for p in processes:
+ #       p.join()
+ #   print(f'Finish joining process')
         
 
 
-     mel_spectrogram = torchaudio.transforms.MelSpectrogram(
-        sample_rate= SAMPLE_RATE,
-        n_fft = 400,
+#     mel_spectrogram = torchaudio.transforms.MelSpectrogram(
+#        sample_rate= SAMPLE_RATE,
+#        n_fft = 400,
         #win_length = 400,
-        hop_length = 160,
-        n_mels=128
-    )
+#        hop_length = 160,
+#        n_mels=128
+#    )
 
-    usd = DatasetGenerator(AUDIO_DIR, SAMPLE_RATE, mel_spectrogram)
+#    usd = DatasetGenerator(AUDIO_DIR, SAMPLE_RATE, mel_spectrogram)
 
-    signal, label = usd[0]
-    plotMelSpectrogram(np.squeeze(signal.detach().numpy()), SAMPLE_RATE)
-    print(signal.shape) """
+#    signal, label = usd[0]
+#    plotMelSpectrogram(np.squeeze(signal.detach().numpy()), SAMPLE_RATE)
+#    print(signal.shape) """
 
