@@ -1,8 +1,6 @@
 from torch.utils.data import Dataset
 import torch
 import torchaudio
-import matplotlib.pyplot as plt
-#import librosa.display
 import numpy as np
 import os
 from tqdm import tqdm
@@ -108,44 +106,44 @@ class DatasetGenerator(Dataset):
 #    plt.colorbar(format="%+2.f")
 #    plt.show()
 
-def saveTensorToFile(dataset, index):
-    signal, label, path = dataset[index]
-    subpath = "/home/yhbedoya/Repositories/AudioMAE/Dataset/" + "/".join(path.split("/")[-2:])[:-4] + ".pt"
-    torch.save(signal, subpath)
+#def saveTensorToFile(dataset, index):
+#    signal, label, path = dataset[index]
+#    subpath = "/home/yhbedoya/Repositories/AudioMAE/Dataset/" + "/".join(path.split("/")[-2:])[:-4] + ".pt"
+#    torch.save(signal, subpath)
 
-def calMeanvar(dataset, index):
-    signal, label = dataset[index]
-    mean = torch.mean(signal)
-    std = torch.square(torch.std(signal))
+#def calMeanvar(dataset, index):
+#    signal, label = dataset[index]
+#    mean = torch.mean(signal)
+#    std = torch.square(torch.std(signal))
 
-    return mean, std
+#    return mean, std
 
-if __name__ == "__main__":
-    AUDIO_DIR = "/home/yhbedoya/Repositories/AudioMAE/Data/"
-    sample_rate = 16000
+#if __name__ == "__main__":
+#    AUDIO_DIR = "/home/yhbedoya/Repositories/AudioMAE/Data/"
+#    sample_rate = 16000
 
-    hanningWindowSeconds = 25/1000
-    win_length = int(sample_rate * hanningWindowSeconds)
-    print(f'win_length: {win_length}')
-    n_fft = int(win_length * 1.5)
-    print(f'n_fft: {n_fft}')
-    shiftsWindSeconds = 10/1000
-    hop_len = int(sample_rate * shiftsWindSeconds)
-    print(f'hop_len: {hop_len}')
+#    hanningWindowSeconds = 25/1000
+#    win_length = int(sample_rate * hanningWindowSeconds)
+#    print(f'win_length: {win_length}')
+#    n_fft = int(win_length * 1.5)
+#    print(f'n_fft: {n_fft}')
+#    shiftsWindSeconds = 10/1000
+#    hop_len = int(sample_rate * shiftsWindSeconds)
+#    print(f'hop_len: {hop_len}')
 
-    mel_spectrogram = torchaudio.transforms.MelSpectrogram(
-        sample_rate= sample_rate,
-        n_fft = n_fft,
-        win_length = win_length,
-        hop_length = hop_len,
-        n_mels=128
-    )
+#    mel_spectrogram = torchaudio.transforms.MelSpectrogram(
+#        sample_rate= sample_rate,
+#        n_fft = n_fft,
+#        win_length = win_length,
+#        hop_length = hop_len,
+#        n_mels=128
+#    )
 
-    dataset = DatasetGenerator(AUDIO_DIR, sample_rate, mel_spectrogram)
-
-    signal, label = dataset[0]
-    plotMelSpectrogram(np.squeeze(signal.detach().numpy()), sample_rate)
-    print(signal.shape)
+#    dataset = DatasetGenerator(AUDIO_DIR, sample_rate, mel_spectrogram)
+#
+#    signal, label = dataset[0]
+#    plotMelSpectrogram(np.squeeze(signal.detach().numpy()), sample_rate)
+#    print(signal.shape)
 
 
 
