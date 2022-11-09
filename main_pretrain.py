@@ -107,7 +107,7 @@ def get_args_parser():
     parser.set_defaults(pin_mem=True)
 
     # distributed training parameters
-    parser.add_argument('--world_size', default=2, type=int,         #Number of gpus
+    parser.add_argument('--world_size', default=1, type=int,         #Number of gpus
                         help='number of distributed processes')
     parser.add_argument('--local_rank', default=0, type=int)         #index of master gpu
     parser.add_argument('--dist_on_itp', action='store_true')
